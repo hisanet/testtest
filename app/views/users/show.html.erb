@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+<section class="content">
+	<p>
+	  <strong>Name:</strong>
+	  <%= @user.name %>
+	</p>
+
+	<p>
+	  <strong>Email:</strong>
+	  <%= @user.email %>
+	</p>
+
+	<p>
+	  <strong>年齢:</strong>
+	  <%= @user.age %>
+	</p>
+
+	<p>
+	  <strong>テーム名:</strong>
+	  <%= @user.team_id %>
+	</p>
+
+	<%= link_to 'Edit', edit_user_path(@user) %> |
+	<%= link_to 'Back', users_path %>
+</section>
