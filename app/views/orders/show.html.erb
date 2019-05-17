@@ -1,0 +1,67 @@
+<section class="content-header">
+	<p id="notice"><%= notice %></p>
+</section>
+
+<section class="content">
+<p>
+  <strong>Date:</strong>
+  <%= @order.ord_date %>
+</p>
+<p>
+  <strong>Name:</strong>
+  <%= @order.name %>
+</p>
+
+<p>
+  <strong>Corporation:</strong>
+  <%= @order.corporation_id %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @order.price %>
+</p>
+
+<div class="row">    
+
+      <table class="table table-condensed table-hover table-striped " >
+        <thead class="thead-dark">
+        <tr>
+          <th scope="col">商品名</th>
+          <th scope="col">単価</th>
+          <th scope="col">数量</th>
+          <th scope="col">小計</th>
+          <th scope="col">保守</th>
+
+        </tr>
+        </thead>    
+ 		
+        <tbody>
+        <% @order.ord_details.each do|ord_detail|%>
+        <tr>
+          <td><%= ord_detail.product.name %></td>
+          <td><%= ord_detail.unit_price %></td>
+          <td><%= ord_detail.quantity %></td>
+          <td><%= ord_detail.price %></td>
+          <td><%= 
+          if ord_detail.mainte_bool
+          	fa_icon("check-circle-o")
+          	else 
+    
+          		fa_icon("minus")
+          	end
+          		%></td>
+          
+      </tr>
+          <% end%>
+      	</tbody>
+      	
+      </table>    
+
+</div>
+
+
+
+<%= link_to 'Edit', edit_order_path(@order) %> |
+<%= link_to 'Back', orders_path %>
+</section>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sample</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
+
+ </head>
+
+  <body class="skin-blue" >
+    <div class="wrapper" >
+      <!-- トップメニュー -->
+        <header class="main-header">
+
+            <!-- ロゴ -->
+            <a href="" class="logo">管理画面</a>
+
+            <!-- トップメニュー -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li><a href="">顧客管理</a></li>
+                </ul>
+            </nav>
+
+        </header><!-- end header -->
+        <!-- サイドバー -->
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu">
+
+                    <!-- メニューヘッダ -->
+                    <li class="header">機能一覧</li>
+
+                    <!-- メニュー項目 -->
+                    <li>
+                      <%= link_to("投稿一覧", "/users") %>
+                    </li>
+                    <li>
+                      <%= link_to("チーム", "/teams") %>
+                    </li>
+                    <li>
+                      <%= link_to("注文", "/orders") %>
+                    </li>
+                    <li>
+                      <%= link_to("注文詳細", "/ord_details") %>
+                    </li>
+                    <li>
+                      <%= link_to("商品登録", "/products") %>
+                    </li>
+                    <li>
+                      <%= link_to("法人登録", "/corporations") %>
+                    </li>
+
+                </ul>
+            </section>
+        </aside><!-- end sidebar -->
+
+        <!-- content -->
+        <div class="content-wrapper">
+          <%= yield %>
+        </div><!-- end content -->
+
+        <!-- フッター -->
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">Version1.0</div>
+            <strong>Copyright &copy; 2015</strong>, All rights reserved.
+        </footer><!-- end footer -->
+        
+    </div>
+  
+  </body>
+</html>

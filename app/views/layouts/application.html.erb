@@ -11,54 +11,66 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
 
+<style type="text/css">
+        .input-group-append {
+            background-color: #faf;
+        }
+    </style>
  </head>
 
-  <body class="skin-blue" >
-    <div class="wrapper" >
-      <!-- トップメニュー -->
-        <header class="main-header">
-
-            <!-- ロゴ -->
-            <a href="" class="logo">管理画面</a>
-
-            <!-- トップメニュー -->
-            <nav class="navbar navbar-static-top" role="navigation">
-                <ul class="nav navbar-nav">
-                    <li><a href="">顧客管理</a></li>
-                </ul>
-            </nav>
-
-        </header><!-- end header -->
-        <!-- サイドバー -->
-        <aside class="main-sidebar">
-            <section class="sidebar">
-                <ul class="sidebar-menu">
-
-                    <!-- メニューヘッダ -->
-                    <li class="header">機能一覧</li>
-
-                    <!-- メニュー項目 -->
-                    <li>
-                      <%= link_to("投稿一覧", "/users") %>
-                    </li>
-
-                </ul>
-            </section>
-        </aside><!-- end sidebar -->
-
-        <!-- content -->
-        <div class="content-wrapper">
-          <%= yield %>
-        </div><!-- end content -->
-
-        <!-- フッター -->
-        <footer class="main-footer">
-            <div class="pull-right hidden-xs">Version1.0</div>
-            <strong>Copyright &copy; 2015</strong>, All rights reserved.
-        </footer><!-- end footer -->
-        
+  <body>
+<header>
+    <div class="container">
+        <p>Logo</p>
     </div>
-  
+</header>
+<nav class="navbar navbar-expand-md navbar-dark bg-info fixed-top">
+  <a class="navbar-brand" href="#">受注計算システム</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor01">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item ">
+        <a class="nav-link" href="#">Home </a>
+      </li>
+      <li class="nav-item <%= 'active' if controller.controller_name == 'orders' %>">
+        <%= link_to "受注", { controller: "orders" } ,class: "nav-link"%>
+      </li>
+      <li class="nav-item <%= 'active' if controller.controller_name == 'users' %>">
+        <%= link_to "ユーザ", { controller: "users" } ,class: "nav-link"%>
+      </li>
+      <li class="nav-item <%= 'active' if controller.controller_name == 'products' %>">
+        <%= link_to "商品", { controller: "products" } ,class: "nav-link"%>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About</a>
+      </li>
+    </ul>
+
+  </div>
+</nav>
+
+    <div class="container-fluid">
+      <% if content_for?(:title) %><h1><%= yield :title %></h1><% end %>
+      <div class="row">
+   
+          
+          <%= yield %>
+
+      </div><!--/row-->
+
+      <hr />
+
+      <footer class="no_print">
+        <p>&copy; Railsアプリケーション構築ガイド 2015</p>
+      </footer>
+
+    </div> <!-- /container -->
+
   </body>
 </html>

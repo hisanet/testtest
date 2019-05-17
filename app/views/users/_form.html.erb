@@ -30,6 +30,10 @@
     <%= form.label :team_id %>
     <%= form.text_field :team_id %>
   </div>
+  <div class="field ">
+    <%= form.label :row_order %>
+    <%= form.number_field  :row_order %>
+  </div>
   <!-- test
 <div class="field">
     <%= form.label :name %>    
@@ -41,6 +45,13 @@
     <%= form.grouped_collection_select(:member_id, Team.all, :users, :name, :id, :name) %>
   </div>
 -->
+<div class="field">
+    <%= form.label :name %>    
+
+    <%= form.collection_select(:ajax_example, User.all, :id, :name,
+    {prompt: ""}, {class: "form-control"}) %>
+
+  </div>
 <%= form.grouped_collection_select(:member_id, Team.all, :users, :name, :id, :name) %>
 
   <div class="actions">

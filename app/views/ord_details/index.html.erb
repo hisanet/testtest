@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Ord Details</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Order</th>
+      <th>Product</th>
+      <th>Unit price</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ord_details.each do |ord_detail| %>
+      <tr>
+        <td><%= ord_detail.order_id %></td>
+        <td><%= ord_detail.product_id %></td>
+        <td><%= ord_detail.unit_price %></td>
+        <td><%= ord_detail.quantity %></td>
+        <td><%= ord_detail.price %></td>
+        <td><%= link_to 'Show', ord_detail %></td>
+        <td><%= link_to 'Edit', edit_ord_detail_path(ord_detail) %></td>
+        <td><%= link_to 'Destroy', ord_detail, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ord Detail', new_ord_detail_path %>
+<%= link_to 'New User', new_ord_detail_path, remote: true, class: "btn btn-lg btn-primary" %>
+<div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+<div class="foot-amount">
+  <p>test</p>
+</div>

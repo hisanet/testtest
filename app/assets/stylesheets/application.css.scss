@@ -1,0 +1,183 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+
+
+ *= require select2
+ *= require jquery-ui
+ *= require flatpickr
+ 
+
+*= require select2-bootstrap
+
+ */
+@import 'font-awesome';  
+@import 'bootstrap'; 
+@import 'bootstrap/bootstrap-tooltip'; 
+@import 'admin-lte/dist/css/AdminLTE.min';  
+@import 'admin-lte/dist/css/skins/skin-blue.min';  
+@import 'admin-lte/plugins/iCheck/all.css';
+
+
+@media print{
+    .no_print{
+        display: none;
+    }
+
+}
+.sheet {
+  page-break-after: always;
+}
+
+
+
+.navbar-inverse{
+  background-color: #109cc7;
+}
+.navbar-dark .navbar-nav .nav-item:hover .nav-link {
+color: #FFFF00;
+}
+
+
+.foot-amount {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: fixed;
+    bottom: -2px;
+
+    width: 1180px;
+    height: 80px;
+    background-color: #f2f2f2;
+    border: 1px solid #bab9b9;
+    padding: 20px 24px;
+    z-index: 1001;
+}
+.f-amount {
+    -webkit-box-sizing: border-box;
+
+    bottom: -2px;
+    background-color: #f2f2f2;
+    border: 1px solid #bab9b9;
+    z-index: 1001;
+}
+.f-amount .form-group{
+	margin-bottom: 1rem;
+}
+
+.total_iptxt {
+	font: 16px/20px sans-serif;
+	text-align: right;
+	width: 100%;
+	transition: 0.3s;
+	letter-spacing: 1px;
+	border: none;
+	background: transparent;
+	border-bottom: 1px dashed #7d7d7d;
+}
+.total_iptxt input[type='text'] {
+	font: 15px/24px sans-serif;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 0.3em;
+	transition: 0.3s;
+	letter-spacing: 1px;
+	color: #aaaaaa;
+	border: none;
+	border-bottom: 2px solid #1b2538;
+	background: transparent;
+}
+
+.mainte_iptxt {
+  text-align: right;
+  width: 100%;
+  transition: 0.3s;
+  letter-spacing: 1px;
+  border: none;
+  background: transparent;
+  border-bottom: 1px dashed #7d7d7d;
+}
+.mainte_month {
+  text-align: right;
+  width: 100%;
+  transition: 0.3s;
+  letter-spacing: 1px;
+  border: none;
+  background: transparent;
+  border-bottom: 1px dashed #7d7d7d;
+}
+textarea.form-control{
+      height: 100%;
+}
+
+.sales_table td{
+  padding: 0.1rem;
+}
+
+.sales_table td:nth-child(2) {
+  width: 35%;
+}
+.sales_table td:nth-child(3) {
+  width: 20%;
+}
+
+.sales_table td:nth-child(4) {
+  width: 10%;
+}
+.mainte_table td{
+font-size: 16px;
+  padding: 0.1rem;
+}
+
+@media screen and (max-width: 768px) {
+  .sales_table .form-control{
+    padding: 0.375rem 0.15rem;
+  }
+  .sales_table td:nth-child(4) {
+  width: 10%;
+}
+}
+@media screen and (max-width: 600px) {
+.sales_table .form-control{
+  padding: 0.375rem 0.75rem;
+}
+  table thead {
+    display: none;
+  }
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+  }
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    text-align: right;
+  }
+  table td:before {
+    content: attr(aria-label);
+    float: left;
+  } 
+
+  .sales_table td:nth-child(1) {
+  width: 100%;
+}
+  .sales_table td:nth-child(2) {
+  width: 100%;
+}
+.sales_table td:nth-child(3) {
+  width: 100%;
+}
+
+.sales_table td:nth-child(4) {
+  width: 100%;
+} 
+}
+

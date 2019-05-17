@@ -1,0 +1,14 @@
+<section class="content-header">
+	<h1>違う画面</h1>
+</section>
+<section class="content">
+
+
+
+<%= render 'form', ord_detail: @ord_detail %>
+
+<%= link_to 'Show', @ord_detail %> |
+<%= link_to 'Back', ord_details_path %>
+<%= link_to "PDF送信", output_order_path %>
+
+</section>

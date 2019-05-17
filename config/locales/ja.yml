@@ -1,0 +1,18 @@
+ja:
+  activerecord:
+    models:
+      order: 注文
+      product: 商品
+      ord_detail: 注文詳細
+      user: ユーザー
+    attributes:
+      oeders: 注文
+      ord_details:
+        product: 商品名
+      users: ユーザー
+  helpers:
+    submit:
+      create: "%{model}作成"
+      update: "%{model}更新"
+  
+      

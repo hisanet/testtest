@@ -6,14 +6,22 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
-
+  
+#テーブルの並び替え(ドラッグドロップ) rank使用
+     # @users = User.all
+    @users = User.rank(:row_order)
  
   # グループで集計の機能
     pivotes = User.left_outer_joins(:sales).group("users.name").sum(:sale_co) 
     @labels = pivotes.map(&:first)
     @datas = pivotes.map(&:second)
+  end
 
+  def update_row_order
+    @user = User.find(user_params[:user_id])
+    @user.row_order_position = user_params[:row_order_position]
+    @user.save
+    render body: nil
   end
 
 
@@ -77,6 +85,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def sort
+  #  user = User.find(params[:user_id])
+   # user.update(users_params)
+    #render nothing: true
+    @user = User.find(user_params[:user_id])
+    @user.row_order_position = user_params[:row_order_position]
+    @user.save
+
+    render body: nil
+  end
+
 
 
   private
@@ -87,6 +106,8 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :email, :age, :team_id)
+    #  params.require(:user).permit(:name, :email, :age, :team_id)
+      params.require(:user).permit(:user_id,:name, :email, :age, :team_id,:row_order_position)
+    #row_order ではなく、row_order_positionなのはgemの仕様
     end
 end

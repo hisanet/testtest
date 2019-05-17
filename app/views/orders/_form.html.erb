@@ -1,0 +1,549 @@
+
+
+
+ <% total=0%>
+  <%= form_with(model: order) do |form| %>
+    <% if order.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(order.errors.count, "件のエラー") %> があり保存できませんでした。</h2>
+
+        <ul>
+        <% order.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+<section class="sheet">
+<div class="card">
+<div class="card-body">
+ <div class="container-fluid"> 
+
+
+  <!-- レイアウト追加　-->
+  <div class="row">
+  <!-- 取引先フォーム　-->
+  <div class="col">
+    <div class="form-group">
+    <%= form.label :name %>
+    <%= form.text_field :name ,class: 'form-control' %>
+    </div>
+  </div>
+  <div class="col">
+    <div class="form-group">
+    <%= form.label :corporation_id %>
+    <%= form.number_field :corporation_id,class: 'form-control' %>
+    </div>
+  </div>
+</div>
+<!-- 日付　-->
+<div class="row ">
+  <div class="col">
+    <div class="form-group mb-3">
+      <%= form.label :ord_date %>
+      <div class="flatpickr input-group"  data-wrap="true"  data-clickOpens="false">
+      <%= form.text_field :ord_date , autocomplete: 'off',class: 'form-control ',data:{altinput:'true',allowInput:'true',input:''} %>
+      <div class="input-group-append">
+        <span class="input-group-text"  data-toggle>
+          <span class="fa fa-calendar "></span>
+        </span>
+        <span class="input-group-text"  data-clear>
+          <span class="fa fa-close "></span>
+        </span>
+      </div>
+      </div>
+    </div>
+</div>
+  <div class="col">
+  </div>
+</div>
+
+  
+    <!-- 取引先フォームまで　-->
+<div class="row">    
+      <table class="table sales_table">
+        <thead>
+        <tr>
+          <th scope="col">商品名</th>
+          <th scope="col">単価</th>
+          <th scope="col">数量</th>
+          <th scope="col">小計</th>
+          <th scope="col"><span class="user_tooltip fa fa-question-circle" title="保守加入でチェック" data-toggle="tooltip">
+          </span></th>
+        </tr>
+        </thead>    
+
+        <tbody id='detail-association-insertion-point'>
+        
+          <div class="form-group">
+                <%= form.fields_for :ord_details do |od| %>
+                  <%= render 'ord_detail_fields', f: od %>
+                <% end %>
+          </div>
+        </tbody>
+      </table>    
+</div>
+
+
+<!-- Table小計-->
+<div class="row justify-content-between">
+  <div class="col">
+    <div class="text-left links">
+      <%= link_to_add_association  form, :ord_details,
+        class: 'btn btn-default btn-sm',
+        data: {
+          association_insertion_node: '#detail-association-insertion-point',
+          association_insertion_method: 'append' } do
+       %>
+       <i class="fa fa-plus"></i>
+        <span>行の追加(保守は再計算して下さい)</span>
+       <% end%>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+  <div class="form-group row justify-content-end">
+    <label class="col-sm-4 col-form-label" for="">合計(税抜)</label>
+    <div class="col-sm-8">
+
+    <%= form.text_field :price,data: { autonumeric: { aSign: '¥ ', mDec: 0,vMin: '0', vMax: '999999999', mRound: 'D' }},class: 'total total_iptxt' ,disabled: true%>
+    </div>
+    </div> 
+  </div>
+</div>
+<!-- Table小計まで-->
+<!-- Table消費税-->
+<div class="row justify-content-between">
+  <div class="col">
+  </div>
+
+  <div class="col-sm-6">
+  <div class="form-group row justify-content-end">
+    <label class="col-sm-4 col-form-label" for="">消費税(8%)</label>
+    <div class="col-sm-8">
+
+    <%= form.text_field :tax_price,data: { autonumeric: { aSign: '¥ ', mDec: 0,vMin: '0', vMax: '999999999', mRound: 'D' }},class: 'tax total_iptxt' ,disabled: true%>
+    </div>
+    </div> 
+  </div>
+</div>
+<!-- Table消費税まで-->
+<!-- Table総合計-->
+<div class="row justify-content-between">
+  <div class="col">
+  </div>
+
+  <div class="col-sm-6">
+  <div class="form-group row justify-content-end">
+    <label class="col-sm-4 col-form-label" for="">総合計</label>
+    <div class="col-sm-8">
+
+    <%= form.text_field :total,data: { autonumeric: { aSign: '¥ ', mDec: 0,vMin: '0', vMax: '999999999', mRound: 'D' }},class: 'grand_total total_iptxt' ,disabled: true%>
+    </div>
+    </div> 
+  </div>
+</div>
+<!-- Table総合計まで-->       
+
+
+
+
+<!-- FixBox合計--> 
+    <div class="container-fluid f-amount fixed-bottom no_print">
+      <div class="row align-items-center justify-content-end">
+          <div class="col-sm-2">
+             <div class="actions">
+                <%= form.submit '保守計算', :name => 'preview_button', formtarget: "_blank" %>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group row align-items-center">
+              <label class="col-sm-6 col-form-label" for="">合計</label>
+              <div class="col-sm-12">
+              <%= form.text_field :price,data: { autonumeric: { aSign: '¥ ', mDec: 0,vMin: '0', vMax: '999999999', mRound: 'D' }},class: 'total total_iptxt' ,disabled: true%>
+              </div>
+            </div>    
+          </div>
+          <div class="col-sm-2">
+            <div class="actions">
+            <%= form.submit class: 'btn btn-success'%>
+            </div>
+          </div>
+
+      </div>
+    </div><!-- end row container-->
+<!-- FixBox合計まで--> 
+
+
+
+</div>
+</div>
+</div>
+
+<!-- from入力まで-->
+
+<!--保守-->
+<div class="card">
+<div class="card-body">
+<div class="container-fluid"> 
+  <h4>保守計算 確認表</h4>
+  <!-- row1列目-->
+  <div class="row"><!-- row-->
+    <!--Atlas保守-->
+    <div class="col p-sm-2">
+      <div class="card">
+        <div class="card-header">機械保守</div>
+         <table class="mainte_table table table-sm table-hover " >
+            <thead class="table-info">
+            <tr>
+              <th scope="col" class="text-center">商品名</th>
+              <th scope="col" class="text-center">数量</th> 
+              <th scope="col" class="text-center">年額</th>
+              <th scope="col" class="text-center">算定額</th>
+
+            </tr>
+            </thead>    
+        
+            <tbody>
+            <% @order.ord_details.atlas.each do|ord_detail|%>
+            <% if ord_detail.product.blank? %><!-- newで空欄だとshowエラーが出る-->
+            <% else %>
+              <tr>
+                <td><%= ord_detail.product.name %></td>
+                <td class="text-right"><%= ord_detail.quantity %></td>
+                <td class="text-right"><%= number_to_currency(ord_detail.mainte_yearprice, :format => "%u%n", :unit => "@") %></td>
+                <td class="text-right"><%= number_to_currency(ord_detail.mainte, :format => "%u%n", :unit => "￥")%></td>
+              </tr>
+               <% end%>
+              <% end%>
+              <tr class="table-success">
+                <td></td> <td>小計</td> 
+                <td><div class="text-right"><%= number_to_currency(@atlas_year, :format => "%u%n", :unit => "@")  %></div></td>  
+                <td><div class="text-right"><%= number_to_currency(@atlas, :format => "%u%n", :unit => "￥") %></div></td>
+              </tr>   
+               </tbody>   
+          </table> 
+      </div><!-- end Atlas-->
+    </div>
+    <!--Printer保守-->
+    <div class="col p-sm-2">
+      <div class="card">
+        <div class="card-header">Printer OCR保守</div>
+         <table class="mainte_table table table-sm table-hover " >
+            <thead class="table-info">
+            <tr>
+              <th scope="col" class="text-center">商品名</th>
+              <th scope="col" class="text-center">数量</th> 
+              <th scope="col" class="text-center">年額</th>
+              <th scope="col" class="text-center">算定額</th>
+
+            </tr>
+            </thead>    
+        
+            <tbody>
+            <% @order.ord_details.printer.each do|ord_detail|%>
+            <% if ord_detail.product.blank? %><!-- newで空欄だとshowエラーが出る-->
+            <% else %>
+              <tr>
+                <td><%= ord_detail.product.name %></td>
+                <td class="text-right"><%= ord_detail.quantity %></td>
+                <td class="text-right"><%= number_to_currency(ord_detail.mainte_yearprice, :format => "%u%n", :unit => "@") %></td>
+                <td class="text-right"><%= number_to_currency(ord_detail.mainte, :format => "%u%n", :unit => "￥")%></td>
+              </tr>
+               <% end%>
+              <% end%>
+              <tr class="table-success">
+                <td></td> <td>小計</td> 
+                <td><div class="text-right"><%= number_to_currency(@printer_year, :format => "%u%n", :unit => "@")  %></div></td>  
+                <td><div class="text-right"><%= number_to_currency(@printer, :format => "%u%n", :unit => "￥") %></div></td>
+              </tr>   
+               </tbody>   
+          </table> 
+      </div><!-- end Printer-->
+    </div>
+  </div><!-- row-->
+  <!-- row2列目-->
+  <div class="row">
+    <div class="col p-sm-2">
+      <div class="card">
+        <div class="card-header">CS保守</div>
+         <table class="mainte_table table table-sm table-hover " >
+            <thead class="table-info">
+            <tr>
+              <th scope="col" class="text-center">商品名</th>
+              <th scope="col" class="text-center">数量</th> 
+              <th scope="col" class="text-center">年額</th>
+              <th scope="col" class="text-center">算定額</th>
+
+            </tr>
+            </thead>    
+        
+            <tbody>
+            <% @order.ord_details.cs.each do|ord_detail|%>
+            <% if ord_detail.product.blank? %><!-- newで空欄だとshowエラーが出る-->
+            <% else %>
+              <tr>
+                <td><%= ord_detail.product.name %></td>
+                <td class="text-right"><%= ord_detail.quantity %></td>
+                <td class="text-right"><%= number_to_currency(ord_detail.mainte_yearprice, :format => "%u%n", :unit => "@") %></td>
+                <td class="text-right"><%= number_to_currency(ord_detail.mainte, :format => "%u%n", :unit => "￥")%></td>
+              </tr>
+               <% end%>
+              <% end%>
+              <tr class="table-success">
+                <td></td> <td>小計</td> 
+                <td><div class="text-right"><%= number_to_currency(@cs_year, :format => "%u%n", :unit => "@")  %></div></td>  
+                <td><div class="text-right"><%= number_to_currency(@cs, :format => "%u%n", :unit => "￥") %></div></td>
+              </tr>   
+               </tbody>   
+          </table> 
+      </div><!-- end CS-->
+    </div>
+    <!--TS保守ここから-->
+    <div class="col p-sm-2">
+      <div class="card">
+        <div class="card-header">TS保守</div>
+         <table class="mainte_table table table-sm table-hover " >
+            <thead class="table-info">
+            <tr>
+              <th scope="col" class="text-center">商品名</th>
+              <th scope="col" class="text-center">数量</th> 
+              <th scope="col" class="text-center">年額</th>
+              <th scope="col" class="text-center">算定額</th>
+
+            </tr>
+            </thead>    
+        
+            <tbody>
+            <% @order.ord_details.ts.each do|ord_detail|%>
+            <% if ord_detail.product.blank? %><!-- newで空欄だとshowエラーが出る-->
+            <% else %>
+              <tr>
+                <td><%= ord_detail.product.name %></td>
+                <td class="text-right"><%= ord_detail.quantity %></td>
+                <td class="text-right"><%= number_to_currency(ord_detail.mainte_yearprice, :format => "%u%n", :unit => "@") %></td>
+                <td class="text-right"><%= number_to_currency(ord_detail.mainte, :format => "%u%n", :unit => "￥")%></td>
+              </tr>
+               <% end%>
+              <% end%>
+              <tr class="table-success">
+                <td></td> <td>小計</td> 
+                <td><div class="text-right"><%= number_to_currency(@ts_year, :format => "%u%n", :unit => "@")  %></div></td>  
+                <td><div class="text-right"><%= number_to_currency(@ts, :format => "%u%n", :unit => "￥") %></div></td>
+              </tr>   
+               </tbody>   
+          </table> 
+      </div>
+    </div><!-- end TS-->
+  </div>
+  </section>
+  <!-- row-->
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">保守計算式</div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-3 text-right p-1">算定合計額：</dt>
+            <dd class="col-sm-3 p-1 mainte_iptxt"><span><%= number_to_currency(@maint, :format => "%u%n", :unit => "￥") %></span></dd>
+            <dd class="col-sm-6 text-center p-1">
+              <%= link_to '保守規定', mainte_price_order_path, remote: true, class: "btn  btn-primary" %>
+              <div class="modal" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              </div>
+              <!--
+              <%= link_to '保守規定', mainte_price_order_path, remote: true, class: "btn  btn-primary" %>
+              <div class="modal" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              </div>
+              -->
+            </dd>
+            
+            <dt class="col-sm-3 text-right p-1">保　守　率：</dt>
+            <dd class="col-sm-3 p-1 mainte_iptxt" ><span><%= @order.ritu/10.to_f %></span>％</dd>
+            <dd class="col-sm-6 text-right p-1"></dd>
+            <dt class="col-sm-3 text-right p-1">保守料年額：</dt>
+            <dd class="col-sm-3 p-1 mainte_iptxt"><span><%= number_to_currency(@maint_year, :format => "%u%n", :unit => "￥") %></span></dd>
+            <dd class="col-sm-6 text-right p-1"></dd>
+            <dt class="col-sm-3 text-right p-1">契約方法：</dt>
+            <dd class="col-sm-3 text-left p-1 mainte_iptxt">
+              <label><%= form.radio_button :mainte_type ,0, class: "mainte_check" %>未加入</label>
+              <label><%= form.radio_button :mainte_type ,1, class: "mainte_check" %>一括</label>
+              <label><%= form.radio_button :mainte_type ,2, class: "mainte_check" %>分割</label>
+            </dd>
+            <dd class="col-sm-6 text-right p-1"></dd>
+            <dt class="col-sm-3 text-right p-1">保守加入年数：</dt>
+            <dd class="col-sm-7 p-1 text-left mainte_iptxt">
+              <label><%= form.radio_button :mainte_year ,0, class: "mainte_check" %>未加入</label>
+              <label><%= form.radio_button :mainte_year ,1, class: "mainte_check" %>1年</label>
+              <label><%= form.radio_button :mainte_year ,2, class: "mainte_check" %>2年</label>
+                <label><%= form.radio_button :mainte_year ,3, class: "mainte_check" %>3年</label>
+                <label><%= form.radio_button :mainte_year ,4, class: "mainte_check" %>4年</label>
+                <label><%= form.radio_button :mainte_year ,5, class: "mainte_check" %>5年</label>
+            </dd>
+            <dt class="col-sm-3 text-right p-1">値引き月数：</dt>
+            <dd class="col-sm-3 text-right p-1">通常6ヶ月 ＋　</dd>
+            <dd class="col-sm-1 p-1"><%= form.number_field :mainte_discount_month,class: 'mainte_month' %></dd>
+            <dd class="col-sm-2 text-left p-1">ヶ月 　</dd>
+              
+            <dd class="col-sm-3 text-right p-1"></dd>
+          </dl>                
+
+          <dl class="row">
+            
+            <!-- 1 -->
+            <dt class="col-sm-3 text-right p-1">計算式<定価>：</dt>
+            <dd class="col-sm-1 p-1"></dd>
+            <dd class="col-sm-7 text-left p-1">
+              <span><%= number_to_currency(@maint_year, :format => "%u%n", :unit => "￥") %>  ×  </span>
+              <span><%= @order.mainte_month/12.to_f %> 年 ×</span>
+              <span><%= @order.mainte_discount.floor %>％ =</span>
+              <span><%= number_to_currency(@order.mainte_price, :format => "%u%n", :unit => "￥")  %></span>
+            </dd>
+            <dd class="col-sm-1 text-right p-1"></dd>
+            <!-- 2 -->
+            <% if @order.mainte_type==2 %>
+            <dt class="col-sm-3 text-right p-1">保守代行<定価>：</dt>
+            <dd class="col-sm-1 p-1"></dd>
+
+            <dd class="col-sm-7 text-left p-1">
+              <span><%= number_to_currency(@order.mainte_price, :format => "%u%n", :unit => "￥") %>  ÷  </span>
+              <span><%= @order.mainte_year*12 %> ヶ月 ＝</span>
+              <span><%= number_to_currency(@order.mainte_sprit_price, :format => "%u%n", :unit => "＠")  %> | </span>
+              <span><%= number_to_currency(@order.mainte_sprit_price, :format => "%u%n", :unit => "＠")  %>×</span>
+              <span>×<%= @order.mainte_year*12 %> ヶ月 ＝</span>
+              <span><%= number_to_currency(@order.mainte_sprit_price_total, :format => "%u%n", :unit => "￥")  %></span>
+              
+            </dd>
+            <dd class="col-sm-1 text-right p-1"></dd>
+            <% end %>
+            <!-- 3 計算式(値引き) -->
+            <% if @order.mainte_discount_month>1 %>
+            <dt class="col-sm-3 text-right p-1">計算式<値引き>：</dt>
+            <dd class="col-sm-1 p-1"></dd>
+            <dd class="col-sm-7 text-left p-1">
+              <span><%= number_to_currency(@maint_year, :format => "%u%n", :unit => "￥") %>  ×  </span>
+              <span><%= @discount_month/12.to_f %> 年 ×</span>
+              <span><%= @order.mainte_discount_add.floor %>％ =</span>
+              <span><%= number_to_currency(@order.mainte_discount_price, :format => "%u%n", :unit => "￥")  %></span>
+
+            </dd>
+            <dd class="col-sm-1 text-right p-1"></dd>
+            <% end %>
+            <!-- 4 保守代行(値引き) -->
+            <% if @order.mainte_type==2 && @order.mainte_discount_month>1%>
+            <dt class="col-sm-3 text-right p-1">保守代行<値引き>：</dt>
+            <dd class="col-sm-1 p-1"></dd>
+
+            <dd class="col-sm-7 text-left p-1">
+              <span><%= number_to_currency(@order.mainte_discount_price , :format => "%u%n", :unit => "￥") %>  ÷  </span>
+              <span><%= @order.mainte_year*12 %> ヶ月 ＝</span>
+              <span><%= number_to_currency(@order.mainte_sprit_discount_price, :format => "%u%n", :unit => "＠")  %> | </span>
+              <span><%= number_to_currency(@order.mainte_sprit_discount_price, :format => "%u%n", :unit => "＠")  %>×</span>
+              <span>×<%= @order.mainte_year*12 %> ヶ月 ＝</span>
+              <span><%= number_to_currency(@order.mainte_sprit_discount_price_total, :format => "%u%n", :unit => "￥")  %></span>
+              
+            </dd>
+            <dd class="col-sm-1 text-right p-1"></dd>
+            <% end %>
+            <!--値引き(一括)-->
+            <% if @order.mainte_type==1 && @order.mainte_discount_month>1 %>
+            <dt class="col-sm-3 text-right p-1">値引き額：</dt>
+            <dd class="col-sm-1 p-1"></dd>
+            <dd class="col-sm-7 text-left p-1">
+              <span><%= number_to_currency(@order.mainte_price, :format => "%u%n", :unit => "￥")  %> ー </span>
+              <span><%= number_to_currency(@order.mainte_discount_price, :format => "%u%n", :unit => "￥")  %> ＝</span>
+              <span><%= number_to_currency(@order.discount_price, :format => "%u%n", :unit => "￥")  %> </span>
+            </dd>
+            <dd class="col-sm-1 p-1"></dd>
+            <!--値引き(分割)-->
+            <% elsif @order.mainte_type==2 %>
+            <dt class="col-sm-3 text-right p-1">値引き額：</dt>
+            <dd class="col-sm-1 p-1"></dd>
+            <dd class="col-sm-7 text-left p-1">
+              <span><%= number_to_currency(@order.mainte_sprit_price_total, :format => "%u%n", :unit => "￥")  %> ー </span>
+              <span><%= number_to_currency(@order.mainte_sprit_discount_price_total, :format => "%u%n", :unit => "￥")  %> ＝</span>
+              <span><%= number_to_currency(@order.discount_price, :format => "%u%n", :unit => "￥")  %> </span>
+            </dd>
+            <dd class="col-sm-1 p-1"></dd>
+            <% end %>
+            <!--ウィルスソフト-->
+            <dt class="col-sm-3 text-right p-1">ESET(ICS機)：</dt>
+            <dd class="col-sm-2 text-right p-1">203 × <%= @order.mainte_month %> × </dd>
+            <dd class="col-sm-1 p-1"><%= form.number_field :virus_soft_ics,class: 'mainte_month' %></dd>
+            <dd class="col-sm-4 text-left p-1">
+              <span> 台 = <%= number_to_currency(@virus_ics, :format => "%u%n", :unit => "￥")  %></span></dd>
+            <dd class="col-sm-2 text-right p-1"></dd>
+
+            <dt class="col-sm-3 text-right p-1">ESET(他社機)：</dt>
+            <dd class="col-sm-2 text-right p-1">203 × <%= @order.mainte_year*12 %> × </dd>
+            <dd class="col-sm-1 p-1"><%= form.number_field :virus_soft_other,class: 'mainte_month' %></dd>
+            <dd class="col-sm-4 text-left p-1">
+              <span> 台 = <%= number_to_currency(@virus_other, :format => "%u%n", :unit => "￥")  %></span></dd>
+            <dd class="col-sm-2 text-right p-1"></dd>
+
+            <dt class="col-sm-3 text-right p-1">ESET(合計)：</dt>
+            <dd class="col-sm-1 p-1"></dd>
+            <dd class="col-sm-7 text-left p-1">
+              <span><%= number_to_currency(@virus_ics, :format => "%u%n", :unit => "￥")  %> ＋ </span>
+              <span><%= number_to_currency(@virus_other, :format => "%u%n", :unit => "￥")  %> ＝</span>
+              <span><%= number_to_currency(@order.virus_soft_price, :format => "%u%n", :unit => "￥")  %> </span>
+
+            </dd>
+            <dd class="col-sm-1 p-1"></dd>
+            <dt class="col-sm-3 text-right p-1">解約分：</dt>
+            <dd class="col-sm-1 p-1"></dd>
+            <dd class="col-sm-7 text-left p-1" style="height: 165px;">
+              <%= form.text_area  :other,class: 'form-control'%>
+
+            </dd>
+            <dd class="col-sm-1 p-1"></dd>
+            <dt class="col-sm-3 text-right p-1">返金額：</dt>
+            <dd class="col-sm-1 p-1"></dd>
+            <dd class="col-sm-3 p-1"><%= form.number_field :repayment,class: 'mainte_month' %></dd>
+             <dd class="col-sm-5 p-1 no_print"> 正数入力</dd>
+             <!--モーダルテスト-->
+             <dd class="col-sm-3 text-center p-1">
+              <%= link_to 'テスト', mainte_price_order_path, remote: true, class: "btn  btn-primary" %>
+              <div class="modal" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              </div>
+            </dd>
+            <dd class="col-sm-3 text-center p-1">
+              <%= link_to 'テスト２', mainte_price_order_path, remote: true, class: "btn  btn-primary" %>
+              <div class="modal" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              </div>
+            </dd>
+          </dl>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">売上計上計算式</div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-3 text-right p-1">保守計上計算式：</dt>
+            <dd class="col-sm-1 p-1"></dd>
+            <dd class="col-sm-7 text-left p-1">
+              <span>（<%= number_to_currency(@order.mainte_discount_price, :format => "%u%n", :unit => "￥")  %></span>
+              <span> ＋ <%= number_to_currency(@order.virus_soft_price, :format => "%u%n", :unit => "￥")  %></span>
+              <% if @order.mainte_discount_month>1 %>
+              <span> ー <%= number_to_currency(@order.discount_price, :format => "%u%n", :unit => "￥")  %></span>
+              <% end %>
+              <% if @order.repayment>1 %>
+              <span> ー <%= number_to_currency(@order.repayment, :format => "%u%n", :unit => "￥")  %></span>
+              <% end %>
+              <span> ）× 70％ ＝<%= number_to_currency(@calculate_mainte, :format => "%u%n", :unit => "￥")  %> </span>
+
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %><!-- Form入力END--> 
+ </div></div></div>
